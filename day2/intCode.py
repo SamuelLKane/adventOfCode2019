@@ -1,42 +1,26 @@
-testInput = [1, 0, 0, 0, 99]
+testInput = [2,3,0,3,99]
 pwd = "/Users/samuelkane/Documents/Development/adventOfCode2019/day2/"
 with open(pwd + 'input.data') as fh:
     program = [int(value) for value in fh.read().split(',')]
-    post = []
-    buffer = []
-    print(program)
-    for i in range(len(program)):
-        # fill the buffer until we reach a halt or have a full line to execute
-        halt = True if program[i] == 99 else False
-        if(not halt and len(buffer) <= 3):
-            buffer.append(program[i])
-            continue
-        if(halt):
-            break  # we have reached the end of the program
-        print(buffer)
-        post = post + buffer
-        addMult = buffer[0]
-        if (addMult != 1 and addMult != 2):
-            raise Exception(f"Invalid addMult key - {addMult} | Buffer {buffer}".rstrip())
-        index1 = buffer[1]
-        if (index1 > len(program) or index1 < 0):
-            raise Exception(f"Invalid index1 key - {index1} | Buffer {buffer}".rstrip())
-        index2 = buffer[2]
-        if (index2 > len(program) or index2 < 0):
-            raise Exception(f"Invalid index2 key - {index2} | Buffer {buffer}".rstrip())
-        dest = buffer[3]
-        if (dest > len(program) or dest < 0):
-            raise Exception(f"Invalid dest key - {dest} | Buffer {buffer}".rstrip())
-
-        if(addMult == 1):
-            print(f"{program[index1]} + {program[index2]} into index {dest}")
+    # program = testInput
+    currentBufferIndex = 0
+    while(True):
+        buffers = [program[i*4:(i+1) * 4] for i in range((len(program) + 3) // 4)]
+        print(buffers)
+        currentBuffer = buffers[currentBufferIndex]
+        if 99 in currentBuffer:
+            break  # reached a halt
+        addMult = currentBuffer[0]
+        index1 = currentBuffer[1]
+        index2 = currentBuffer[2]
+        dest = currentBuffer[3]
+        if addMult == 1:
+            print(f"{program[index1]} + {program[index2]} into {dest}")
             program[dest] = program[index1] + program[index2]
-        else:
-            print(f"{program[index1]} * {program[index2]} into index {dest}")
+        elif addMult == 2:
+            print(f"{program[index1]} * {program[index2]} into {dest}")
             program[dest] = program[index1] * program[index2]
-
-        buffer = []
-        buffer.append(program[i])
-
+        else:
+            raise Exception(f"Invalid addMult value {addMult} in buffer {currentBuffer}".rstrip())
+        currentBufferIndex = currentBufferIndex + 1
     print(program)
-    print(post)
