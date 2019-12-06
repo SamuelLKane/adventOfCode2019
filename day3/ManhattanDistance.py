@@ -35,8 +35,8 @@ def findShortestManhattanDistance(coords):
     shortestCord = 99999
     for coord in coords:
         manDist = manhattanDistance(coord[0], coord[1])
-        if manDist < shortestCord:
-            shortestCord = manDist
+        if manDist + coord[2] < shortestCord:
+            shortestCord = manDist + coord[2]
     return shortestCord
 
 
@@ -47,14 +47,20 @@ wireDirections = [line.strip().split(',') for line in open(pwd + "input.data").r
 wire0Coords = buildWireCoords(wireDirections[0])
 wire1Coords = buildWireCoords(wireDirections[1])
 
-wire0Coords.sort(key=manhattanSort)
-wire1Coords.sort(key=manhattanSort)
+# wire0Coords.sort(key=manhattanSort)
+# wire1Coords.sort(key=manhattanSort)
 commonCords = []
 
-for wire0Coord in wire0Coords:
+for i in range(len(wire0Coords)):
+    wire0Coord = wire0Coords[i]
     if wire0Coord in wire1Coords:
         print(wire0Coord)
-        commonCords.append(wire0Coord)
+        sumOfIndicies = i + wire1Coords.index(wire0Coord)
+        coord = (wire0Coord[0],wire0Coord[1],sumOfIndicies)
+        # print(coord)
+        commonCords.append(coord)
 
 shortestDist = findShortestManhattanDistance(commonCords)
+#605/607 - too low
+#7827 too high
 print(shortestDist)
