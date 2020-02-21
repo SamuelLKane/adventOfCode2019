@@ -29,7 +29,7 @@ def manhattanDistance(val1, val2):
 
 def manhattanSort(coord):
     return manhattanDistance(coord[0],coord[1])
-
+ 
 
 def findShortestManhattanDistance(coords):
     shortestCord = 99999
